@@ -10,8 +10,7 @@ import 'data/model/SourcesResponse.dart';
 class ApiManager{
   //https://newsapi.org/v2/top-headlines/sources?apiKey=3f05df5cb5d043a2bab2d335179588ca&category=sports
 
-
-   Future<SourcesResponse>  getSources()async{
+  static Future<SourcesResponse> getSources() async {
     Uri url = Uri.https("newsapi.org","/v2/top-headlines/sources",{
       "apiKey":"3f05df5cb5d043a2bab2d335179588ca"
     });
