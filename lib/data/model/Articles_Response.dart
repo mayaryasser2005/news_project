@@ -1,11 +1,11 @@
-class SourcesResponse {
+class Articles_Response {
   String? status;
   int? totalResults;
   List<Articles>? articles;
 
-  SourcesResponse({this.status, this.totalResults, this.articles});
+  Articles_Response({this.status, this.totalResults, this.articles});
 
-  SourcesResponse.fromJson(Map<String, dynamic> json) {
+  Articles_Response.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     totalResults = json['totalResults'];
     if (json['articles'] != null) {
@@ -28,7 +28,7 @@ class SourcesResponse {
 }
 
 class Articles {
-  Sources? source;
+  Source? source;
   String? author;
   String? title;
   String? description;
@@ -49,7 +49,7 @@ class Articles {
 
   Articles.fromJson(Map<String, dynamic> json) {
     source =
-        json['source'] != null ? new Sources.fromJson(json['source']) : null;
+        json['source'] != null ? new Source.fromJson(json['source']) : null;
     author = json['author'];
     title = json['title'];
     description = json['description'];
@@ -75,13 +75,13 @@ class Articles {
   }
 }
 
-class Sources {
+class Source {
   String? id;
   String? name;
 
-  Sources({this.id, this.name});
+  Source({this.id, this.name});
 
-  Sources.fromJson(Map<String, dynamic> json) {
+  Source.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
   }
