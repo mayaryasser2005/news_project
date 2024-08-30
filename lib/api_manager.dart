@@ -1,9 +1,6 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:kemo_news_app/constants.dart';
-import 'package:kemo_news_app/data/model/News_Data_Response.dart';
-import 'package:kemo_news_app/data/model/Sources_Responces.dart';
 import 'package:news_project/utils/constant.dart';
 
 import 'data/model/NewsDataResponse.dart';

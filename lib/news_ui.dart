@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_project/screens/tab_item.dart';
+
 import 'api_manager.dart';
 import 'data/model/SourcesResponse.dart';
 
@@ -29,8 +30,7 @@ class _News_UIState extends State<NewsUi> {
               return Center(child: Text("Something went wrong"));
             }
 
-            sources = snapshot.data
-            ??.sources ?? [];
+            sources = snapshot.data?.sources ?? [];
 
             // return ListView.builder
             // (
@@ -68,7 +68,7 @@ class _News_UIState extends State<NewsUi> {
           },
         ),
         FutureBuilder(
-          future: ApiManager.getNewsData(sources[selected_tap_index], id),
+          future: ApiManager.getNewsData(sources[selected_tap_index].id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
