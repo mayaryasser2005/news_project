@@ -1,4 +1,4 @@
-import 'SourcesResponse.dart';
+import 'SourcesResponseNew.dart';
 
 class News_Data_Response {
   String? status;

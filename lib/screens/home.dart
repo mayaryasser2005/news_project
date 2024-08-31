@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
             bottomRight: Radius.circular(25),
           )),
           iconTheme: IconThemeData(color: Colors.white, size: 30),
-          backgroundColor: Colors.orange,
+          backgroundColor: Colors.transparent,
           title: const Text(
             "News App",
             style: TextStyle(

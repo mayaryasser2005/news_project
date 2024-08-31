@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:news_project/data/model/SourcesResponse.dart';
+
+import '../data/model/SourcesResponseNew.dart';
 
 class TabItem extends StatelessWidget {
   Sources sources;

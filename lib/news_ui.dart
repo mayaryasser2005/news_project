@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:news_project/screens/tab_item.dart';
-
 import 'api_manager.dart';
-import 'data/model/SourcesResponse.dart';
+import 'data/model/SourcesResponseNew.dart';
 
 class NewsUi extends StatefulWidget {
   const NewsUi({super.key});
 
   @override
-  State<NewsUi> createState() => _News_UIState();
+  State<NewsUi> createState() => NewsUIState();
 }
 
-class _News_UIState extends State<NewsUi> {
-  int selected_tap_index = 0;
+class NewsUIState extends State<NewsUi> {
+  int selectedTapIndex = 0;
   List<Sources> sources = [];
 
   @override
@@ -23,11 +22,11 @@ class _News_UIState extends State<NewsUi> {
           future: ApiManager.getSources(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
 
             if (snapshot.hasError) {
-              return Center(child: Text("Something went wrong"));
+              return const Center(child: Text("Something went wrong"));
             }
 
             sources = snapshot.data?.sources ?? [];
@@ -46,48 +45,57 @@ class _News_UIState extends State<NewsUi> {
 
             return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: DefaultTabController(
-            length: sources.length,
-            child: TabBar(
-                    isScrollable: true,
-                    indicatorColor: Colors.transparent,
-                    dividerColor: Colors.transparent,
-            onTap: (value) {
-            selected_tap_index = value;
-            setState(() {});
-            },
-                    tabs: sources
-                        .map((e) => TabItem(
-            sources: e,
-            isSelected:
-            sources.elementAt(selected_tap_index) == e,
-            ))
-                .toList(),
-            )),
+              child: Column(
+                children: [
+                  DefaultTabController(
+                      length: sources.length,
+                      child: TabBar(
+                        isScrollable: true,
+                        indicatorColor: Colors.transparent,
+                        dividerColor: Colors.transparent,
+                        onTap: (value) {
+                          selectedTapIndex = value;
+                          setState(() {});
+                        },
+                        tabs: sources
+                            .map((e) => TabItem(
+                                  sources: e,
+                                  isSelected:
+                                      sources.elementAt(selectedTapIndex) == e,
+                                ))
+                            .toList(),
+                      )),
+                  FutureBuilder(
+                    future: ApiManager.getNewsData(
+                        sources[selectedTapIndex].id ?? ""),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (snapshot.hasError) {
+                        return const Center(
+                            child: Text("Something went wrong"));
+                      }
+
+                      var articles = snapshot.data?.articles ?? [];
+
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        separatorBuilder: (context, index) => const Divider(),
+                        itemBuilder: (context, index) {
+                          return Text(articles[index].title ?? "");
+                        },
+                        itemCount: articles.length,
+                      );
+                    },
+                  )
+                ],
+              ),
             );
           },
         ),
-        FutureBuilder(
-          future: ApiManager.getNewsData(sources[selected_tap_index].id),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
 
-            if (snapshot.hasError) {
-              return Center(child: Text("Something went wrong"));
-            }
-
-            var articles = snapshot.data?.articles ?? [];
-
-            return ListView.builder(
-              itemBuilder: (context, index) {
-                return Text(articles[index].title ?? "");
-              },
-              itemCount: articles.length,
-            );
-          },
-        )
       ],
     );
   }

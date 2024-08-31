@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:news_project/data/model/SourcesResponseNew.dart';
 import 'package:news_project/utils/constant.dart';
 
 import 'data/model/NewsDataResponse.dart';
-import 'data/model/SourcesResponse.dart';
 
 class ApiManager {
-  static Future<SourcesResponse> getSources() async {
+  static Future<SourcesResponseNew> getSources() async {
     Uri url = Uri.https(
         Constants.BaseURL, "/v2/everything", {"api_key": Constants.API_Key});
 
@@ -15,7 +15,7 @@ class ApiManager {
 
     var json = jsonDecode(response.body);
 
-    SourcesResponse sources_responces = SourcesResponse.fromJson(json);
+    SourcesResponseNew sources_responces = SourcesResponseNew.fromJson(json);
 
     return sources_responces;
   }
@@ -28,12 +28,12 @@ class ApiManager {
     http.Response response = await http.get(
       url,
       headers: {
-        "api_key": Constants.API_Key,
+        "x_api_key": Constants.API_Key,
       },
     );
 
     var json = jsonDecode(response.body);
-
+    print(json);
     News_Data_Response model = News_Data_Response.fromJson(json);
 
     return model;
