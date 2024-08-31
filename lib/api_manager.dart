@@ -1,26 +1,28 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:news_project/data/model/SourcesResponseNew.dart';
 import 'package:news_project/utils/constant.dart';
 
-import 'data/model/NewsDataResponse.dart';
+import 'data/model/NewsDataRespones.dart';
+import 'data/model/SourcesResponse.dart';
 
+//https://newsapi.org/v2/top-headlines/sources?apiKey=3f05df5cb5d043a2bab2d335179588ca
 class ApiManager {
-  static Future<SourcesResponseNew> getSources() async {
-    Uri url = Uri.https(
-        Constants.BaseURL, "/v2/everything", {"api_key": Constants.API_Key});
+  static Future<SourcesResponse> getSources() async {
+    Uri url = Uri.https(Constants.BaseURL, "v2/top-headlines/sources",
+        {"api_key": Constants.API_Key});
 
     http.Response response = await http.get(url);
 
     var json = jsonDecode(response.body);
 
-    SourcesResponseNew sources_responces = SourcesResponseNew.fromJson(json);
+    SourcesResponse sourcesResponces = SourcesResponse.fromJson(json);
 
-    return sources_responces;
+    return sourcesResponces;
   }
 
-  static Future<News_Data_Response> getNewsData(String sourceID) async {
+//https://newsapi.org/v2/everything?q=bitcoin&apiKey=3f05df5cb5d043a2bab2d335179588ca
+  static Future<NewsDataRespones> getNewsData(String sourceID) async {
     Uri url = Uri.https(Constants.BaseURL, "/v2/everything", {
       "sources": sourceID,
     });
@@ -28,13 +30,13 @@ class ApiManager {
     http.Response response = await http.get(
       url,
       headers: {
-        "x_api_key": Constants.API_Key,
+        "x-api-key": Constants.API_Key,
       },
     );
 
     var json = jsonDecode(response.body);
     print(json);
-    News_Data_Response model = News_Data_Response.fromJson(json);
+    NewsDataRespones model = NewsDataRespones.fromJson(json);
 
     return model;
   }
