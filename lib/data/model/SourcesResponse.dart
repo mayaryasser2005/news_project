@@ -4,7 +4,7 @@ class SourcesRespones {
 
   SourcesRespones({this.status, this.sources});
 
-  SourcesRespones.fromJson(Map<String, dynamic> json) {
+  SourcesRespones.fromJson(Map<dynamic, dynamic> json) {
     status = json['status'];
     if (json['sources'] != null) {
       sources = <Sources>[];
@@ -42,7 +42,7 @@ class Sources {
       this.language,
       this.country});
 
-  Sources.fromJson(Map<String, dynamic> json) {
+  Sources.fromJson(Map<dynamic, dynamic> json) {
     id = json['id'];
     name = json['name'];
     description = json['description'];

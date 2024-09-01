@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:news_project/bloc/states.dart';
+import 'package:news_project/main.dart';
 import 'package:news_project/repo/home_remote_ds_impl.dart';
 import 'package:news_project/ui/tab_item.dart';
 
@@ -19,7 +20,7 @@ class NewsUi extends StatelessWidget {
     return LoaderOverlay(
       child: BlocProvider(
         create: (context) =>
-            HomeCubit(true ? HomeRemoteDsImpl() : HomeLocalDsImpl())
+            HomeCubit(!isConnect ? HomeRemoteDsImpl() : HomeLocalDsImpl())
               ..getSources(id),
         child: BlocConsumer<HomeCubit, HomeStates>(
           listener: (context, state) {

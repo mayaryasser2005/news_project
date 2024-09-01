@@ -12,8 +12,13 @@ class HomeLocalDsImpl implements HomeRepo {
 
   @override
   Future<SourcesRespones> getSources(String id) async {
-    SourcesRespones respones = await CacheSources.getSources();
+    try {
+      SourcesRespones respones = await CacheSources.getSources();
 
-    return respones;
+      return respones;
+    } catch (e) {
+      print("Error ${e.toString()}");
+      rethrow;
+    }
   }
 }
