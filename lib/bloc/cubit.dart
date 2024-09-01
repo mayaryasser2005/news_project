@@ -1,19 +1,18 @@
-import 'dart:convert';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'package:news_project/bloc/states.dart';
 
 import '../data/model/NewsDataRespones.dart';
 import '../data/model/SourcesResponse.dart';
-import '../utils/constant.dart';
+import '../repo/repo.dart';
 
 class HomeCubit extends Cubit<HomeStates> {
-  HomeCubit() : super(HomeinitStates());
+  HomeRepo repo;
+
+  HomeCubit(this.repo) : super(HomeinitStates());
 
   static HomeCubit get(context) => BlocProvider.of(context);
   int selectedTapIndex = 0;
-  SourcesResponse? sourcesResponse;
+  SourcesRespones? sourcesResponse;
 
   NewsDataResponse? newsDataRespones;
 
@@ -25,18 +24,9 @@ class HomeCubit extends Cubit<HomeStates> {
   Future<void> getSources(String id) async {
     try {
       emit(HomeGetSoursesLoadingStates());
-      Uri url = Uri.https(Constants.BaseURL, "v2/top-headlines/sources",
-          {"api_key": Constants.API_Key, "category": id});
 
-      http.Response response = await http.get(url);
+      sourcesResponse = await repo.getSources(id);
 
-      var json = jsonDecode(response.body);
-
-      sourcesResponse = SourcesResponse.fromJson(json);
-      if (response.statusCode != 200) {
-        emit(HomeGetSoursesErrorStates());
-        return;
-      }
       emit(HomeGetSoursesSuccessStates());
       getNewsData(sourcesResponse?.sources?[selectedTapIndex].id ?? "");
     } catch (e) {
@@ -46,21 +36,9 @@ class HomeCubit extends Cubit<HomeStates> {
 
   Future<void> getNewsData(String sourceID) async {
     try {
-      emit(HomeiGetNewsLoadingStates());
-      Uri url = Uri.https(Constants.BaseURL, "/v2/everything", {
-        "sources": sourceID,
-      });
+      emit(HomeGetNewsLoadingStates());
 
-      http.Response response = await http.get(
-        url,
-        headers: {
-          "x-api-key": Constants.API_Key,
-        },
-      );
-
-      var json = jsonDecode(response.body);
-
-      newsDataRespones = NewsDataResponse.fromJson(json);
+      newsDataRespones = await repo.getNewsData(sourceID);
 
       emit(HomeGetNewsSuccessStates());
     } catch (e) {

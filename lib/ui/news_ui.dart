@@ -1,32 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:news_project/bloc/cubit.dart';
 import 'package:news_project/bloc/states.dart';
+import 'package:news_project/repo/home_remote_ds_impl.dart';
 import 'package:news_project/ui/tab_item.dart';
 
+import '../bloc/cubit.dart';
+import '../repo/home_local_ds_impl.dart';
 import 'news_item.dart';
 
 class NewsUi extends StatelessWidget {
-  final String id;
+  String id;
 
-  // final int selectedTapIndex;
-  // final List<Sources> sources;
-
-  NewsUi({
-    required this.id,
-    super.key,
-  });
+  NewsUi({required this.id, super.key});
 
   @override
   Widget build(BuildContext context) {
     return LoaderOverlay(
       child: BlocProvider(
-        create: (context) => HomeCubit()..getSources(id),
+        create: (context) =>
+            HomeCubit(true ? HomeRemoteDsImpl() : HomeLocalDsImpl())
+              ..getSources(id),
         child: BlocConsumer<HomeCubit, HomeStates>(
           listener: (context, state) {
             if (state is HomeGetSoursesLoadingStates ||
-                state is HomeiGetNewsLoadingStates) {
+                state is HomeGetNewsLoadingStates) {
               context.loaderOverlay.show();
             } else {
               context.loaderOverlay.hide();
@@ -34,16 +32,17 @@ class NewsUi extends StatelessWidget {
 
             if (state is HomeGetNewsErrorStates) {
               showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: Text("Error"),
-                        content: Text("SomeThing went wrong"),
-                      ));
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text("Error"),
+                  content: Text("Something went wrong"),
+                ),
+              );
             }
 
             if (state is HomeGetSoursesErrorStates) {
               ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("SomeThing went wrong")));
+                  SnackBar(content: Text("Something went wrong")));
             }
 
             if (state is HomeChageState) {
@@ -56,7 +55,7 @@ class NewsUi extends StatelessWidget {
           },
           builder: (context, state) {
             if (state is HomeGetSoursesErrorStates) {
-              return Text("SomeThing went wrong");
+              return Text("Something went wrong");
             }
             return Padding(
               padding: const EdgeInsets.all(8.0),
@@ -95,7 +94,7 @@ class NewsUi extends StatelessWidget {
                   ),
                   Expanded(
                     child: ListView.separated(
-                      separatorBuilder: (context, index) => const SizedBox(
+                      separatorBuilder: (context, index) => SizedBox(
                         height: 8,
                       ),
                       itemBuilder: (context, index) {
@@ -105,14 +104,12 @@ class NewsUi extends StatelessWidget {
                                 .articles![index]);
                       },
                       itemCount: HomeCubit.get(context)
-                              .newsDataRespones!
-                              .articles
+                              .newsDataRespones
+                              ?.articles
                               ?.length ??
                           0,
                     ),
                   )
-                  // يمكنك هنا إضافة FutureBuilder لعرض الأخبار بناءً على المصدر المختار
-                  // كما في الكود السابق.
                 ],
               ),
             );

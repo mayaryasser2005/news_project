@@ -8,7 +8,7 @@ class HomeGetSoursesErrorStates extends HomeStates {}
 
 class HomeGetSoursesSuccessStates extends HomeStates {}
 
-class HomeiGetNewsLoadingStates extends HomeStates {}
+class HomeGetNewsLoadingStates extends HomeStates {}
 
 class HomeGetNewsErrorStates extends HomeStates {}
 
