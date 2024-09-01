@@ -11,7 +11,7 @@ class TabItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
         decoration: BoxDecoration(
             color: isSelected ? Colors.green : Colors.transparent,
             borderRadius: BorderRadius.circular(24),

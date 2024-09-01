@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:news_project/news_ui.dart';
+import 'package:news_project/data/model/catagory_model.dart';
 
-class HomeScreen extends StatelessWidget {
+import 'category_tab.dart';
+import 'drawer_widget.dart';
+import 'news_ui.dart';
+
+class HomeScreen extends StatefulWidget {
   static const String routeNamed = "Home";
-  const HomeScreen({super.key});
 
+  HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -13,7 +23,9 @@ class HomeScreen extends StatelessWidget {
           image: DecorationImage(image: AssetImage("assets/pattern.png"))),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        drawer: Drawer(),
+        drawer: DrawerWidget(
+          onClick: onDrawerClicked,
+        ),
         appBar: AppBar(
           actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
           shape: RoundedRectangleBorder(
@@ -22,7 +34,7 @@ class HomeScreen extends StatelessWidget {
             bottomRight: Radius.circular(25),
           )),
           iconTheme: IconThemeData(color: Colors.white, size: 30),
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.green,
           title: const Text(
             "News App",
             style: TextStyle(
@@ -30,8 +42,27 @@ class HomeScreen extends StatelessWidget {
           ),
           centerTitle: true,
         ),
-        body: const NewsUi(),
+        body: catagoryModel == null
+            ? CategoryTab(onClick: onCategorySelected)
+            : NewsUi(
+                id: catagoryModel!.id,
+              ),
       ),
     );
+  }
+
+  CatagoryModel? catagoryModel;
+
+  onDrawerClicked(id) {
+    if (id == DrawerWidget.CATEGORY_ID) {
+      catagoryModel = null;
+      Navigator.pop(context);
+    } else if (id == DrawerWidget.SETTINGS_ID) {}
+    setState(() {});
+  }
+
+  onCategorySelected(cat) {
+    catagoryModel = cat;
+    setState(() {});
   }
 }

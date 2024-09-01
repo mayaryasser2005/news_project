@@ -15,7 +15,12 @@ class NewsItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Image.network(article.urlToImage ?? ""),
+          ClipRRect(
+              borderRadius: BorderRadius.circular(25),
+              child: Image.network(
+                article.urlToImage ?? "",
+                height: 240,
+              )),
           Text(
             article.source?.name ?? "",
             style: TextStyle(fontSize: 14, color: Colors.black54),
@@ -23,7 +28,7 @@ class NewsItem extends StatelessWidget {
           Text(article.title ?? "",
               style: TextStyle(fontSize: 22, color: Colors.black)),
           Text(article.description ?? "",
-              style: TextStyle(fontSize: 14, color: Colors.grey)),
+              maxLines: 3, style: TextStyle(fontSize: 14, color: Colors.grey)),
           Text(
             article.publishedAt?.substring(0, 10) ?? "",
             textAlign: TextAlign.end,
